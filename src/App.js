@@ -7,6 +7,7 @@ import {
   useParams,
 } from 'react-router-dom';
 import Shop from './pages/shop/shop.component';
+import Header from './components/header/header.component';
 
 const Topic = (props) => {
   const param = useParams();
@@ -17,6 +18,7 @@ function App() {
   return (
     <Router>
       <div className="App">
+        <Header />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/shop/:topicId" element={<Topic />} />
