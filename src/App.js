@@ -6,6 +6,7 @@ import {
   Route,
   useParams,
 } from 'react-router-dom';
+import Shop from './pages/shop/shop.component';
 
 const Topic = (props) => {
   const param = useParams();
@@ -19,6 +20,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/shop/:topicId" element={<Topic />} />
+          <Route path="/shop" element={<Shop />} />
         </Routes>
       </div>
     </Router>
