@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { signInWithGoogle } from '../../firebase/firebase.utils';
+import { auth, signInWithGoogle } from '../../firebase/firebase.utils';
 import CustomButton from '../custom-button/custom-button.component';
 import FormInput from '../form-input/form-input.component';
 import './sign-in.styles.scss';
@@ -8,10 +8,15 @@ const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    setEmail('');
-    setPassword('');
+    try {
+      await auth.signInWithEmailAndPassword(email, password);
+      setEmail('');
+      setPassword('');
+    } catch (error) {
+      console.log('Error while logging in');
+    }
   };
 
   const handleChange = (event) => {
@@ -27,7 +32,7 @@ const SignIn = () => {
     <div className="sign-in">
       <h2>I already have an account</h2>
       <span>Sign in with your email and password</span>
-      <form onSubmit={(this, handleSubmit)}>
+      <form onSubmit={handleSubmit}>
         <FormInput
           label="Email"
           handleChange={handleChange}
