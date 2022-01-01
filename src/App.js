@@ -13,6 +13,9 @@ import { useEffect } from 'react';
 import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 import { connect } from 'react-redux';
 import { setCurrentUser } from './redux/user/user.actions';
+import { createStructuredSelector } from 'reselect';
+import { selectCurrentUser } from './redux/user/user.selectors';
+import CheckoutPage from './pages/checkout/checkout.component';
 
 function App({ setCurrentUser, currentUser }) {
   useEffect(() => {
@@ -36,6 +39,7 @@ function App({ setCurrentUser, currentUser }) {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/shop" element={<Shop />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
           <Route
             path="/signin"
             element={currentUser ? <Navigate to="/" /> : <SignInAndSignUp />}
@@ -46,8 +50,8 @@ function App({ setCurrentUser, currentUser }) {
   );
 }
 
-const mapStateToProps = ({ user }) => ({
-  currentUser: user.currentUser,
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser,
 });
 const mapDispatchToProps = (dispatch) => ({
   setCurrentUser: (user) => dispatch(setCurrentUser(user)),
