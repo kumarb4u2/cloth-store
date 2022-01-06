@@ -16,6 +16,7 @@ import { setCurrentUser } from './redux/user/user.actions';
 import { createStructuredSelector } from 'reselect';
 import { selectCurrentUser } from './redux/user/user.selectors';
 import CheckoutPage from './pages/checkout/checkout.component';
+import CollectionPage from './pages/collection/collection.component';
 
 function App({ setCurrentUser, currentUser }) {
   useEffect(() => {
@@ -38,7 +39,9 @@ function App({ setCurrentUser, currentUser }) {
         <Header />
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/shop" element={<Shop />} />
+          <Route path="/shop" element={<Shop />}>
+            <Route path=":collectionId" element={<CollectionPage />} />
+          </Route>
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route
             path="/signin"

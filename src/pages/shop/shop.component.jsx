@@ -1,14 +1,12 @@
-import { useState } from 'react';
-import CollectionPreview from '../../components/collection-preview/collection-preview.component';
-import SHOP_DATA from './shop.data';
+import { Outlet, useParams } from 'react-router-dom';
+import CollectionsOverview from '../../components/collections-overview/collections-overview.component';
 
 const Shop = () => {
-  const [collections] = useState(SHOP_DATA);
+  const params = useParams();
+
   return (
-    <div>
-      {collections.map(({ id, ...otherProps }) => (
-        <CollectionPreview key={id} {...otherProps} />
-      ))}
+    <div className="shop-page">
+      {params.collectionId ? <Outlet /> : <CollectionsOverview />}
     </div>
   );
 };
