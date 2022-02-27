@@ -1,14 +1,45 @@
+import { useState } from 'react';
+import { useEffect } from 'react';
+import { connect } from 'react-redux';
 import { Outlet, useParams } from 'react-router-dom';
 import CollectionsOverview from '../../components/collections-overview/collections-overview.component';
+import withSpinner from '../../components/with-spinner/with-spinner.component';
+import {
+  convertCollectionsSnapshotToMap,
+  fireStore,
+} from '../../firebase/firebase.utils';
+import { updateCollection } from '../../redux/shop/shop.actions';
 
-const Shop = () => {
+const CollectionsOverviewWithSpinner = withSpinner(CollectionsOverview);
+const OutletWithSpinner = withSpinner(Outlet);
+
+const Shop = ({ updateCollections }) => {
   const params = useParams();
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    const colletionRef = fireStore.collection('collections');
+    const unsub = colletionRef.onSnapshot(async (snapshot) => {
+      const collectionsMap = convertCollectionsSnapshotToMap(snapshot);
+      updateCollections(collectionsMap);
+      setIsLoading(false);
+    });
+    return () => unsub();
+  }, [updateCollections]);
 
   return (
     <div className="shop-page">
-      {params.collectionId ? <Outlet /> : <CollectionsOverview />}
+      {params.collectionId ? (
+        <OutletWithSpinner isLoading={isLoading} />
+      ) : (
+        <CollectionsOverviewWithSpinner isLoading={isLoading} />
+      )}
     </div>
   );
 };
 
-export default Shop;
+const mapDispatchToProps = (dispatch) => ({
+  updateCollections: (collectionsMap) =>
+    dispatch(updateCollection(collectionsMap)),
+});
+
+export default connect(null, mapDispatchToProps)(Shop);

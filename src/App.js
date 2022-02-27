@@ -30,6 +30,7 @@ function App({ setCurrentUser, currentUser }) {
         setCurrentUser(null);
       }
     });
+
     return () => unsubscribeFromAuth();
   }, [setCurrentUser]);
 
