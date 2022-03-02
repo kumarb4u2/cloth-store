@@ -18,12 +18,11 @@ const Shop = ({ updateCollections }) => {
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     const colletionRef = fireStore.collection('collections');
-    const unsub = colletionRef.onSnapshot(async (snapshot) => {
+    colletionRef.get().then((snapshot) => {
       const collectionsMap = convertCollectionsSnapshotToMap(snapshot);
       updateCollections(collectionsMap);
       setIsLoading(false);
     });
-    return () => unsub();
   }, [updateCollections]);
 
   return (
